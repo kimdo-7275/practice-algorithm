@@ -1,38 +1,19 @@
-import math
+from collections import deque
 
-N, M = map(int, input().split())
+n, k = map(int, input().split())
 
+MAX = 10 ** 5
+visited = [0] * (MAX + 1)
+def bfs(s):
+    q = deque()
+    q.append(s)
 
-# math.inf
-def sol(n, m):
-    lst = [math.inf] * (m + 2)
-    lst[n] = 0
-    # n 이전에 채우기
-    for i in range(n):
-        if n - 1 - i >= 0:
-            lst[n - 1 - i] = i + 1
-    # n부터 m까지 채우기
-    for _ in range(2):
-        for i in range(n + 1, m + 2):
-            # 짝수 일때
-            if i % 2 == 0:
-                if i // 2 >= 0 and i + 1 < m + 2:
-                    lst[i] = min(min(lst[i // 2], lst[i - 1], lst[i + 1]) + 1, lst[i])
-                elif i // 2 >= 0:
-                    lst[i] = min(min(lst[i // 2], lst[i - 1]) + 1, lst[i])
-                elif i + 1 < m + 2:
-                    lst[i] = min(min(lst[i - 1], lst[i + 1]) + 1, lst[i])
-                else:
-                    lst[i] = min(lst[i - 1] + 1, lst[i])
-            else:  # 홀 수 있때
-                if i + 1 < m + 2:
-                    lst[i] = min(min(lst[i - 1], lst[i + 1]) + 1, lst[i])
-                else:
-                    lst[i] = min(lst[i - 1] + 1, lst[i])
-    print(lst[m])
-
-
-if N <= M:
-    sol(N, M)
-else:
-    print(N - M)
+    while q:
+        cur = q.popleft()
+        if cur == k:
+            return visited[k]
+        for i in (cur+1, cur-1, cur * 2):
+            if 0 <= i <= MAX and not visited[i]: 
+              visited[i] = visited[cur] + 1
+              q.append(i)
+print(bfs(n))
