@@ -1,37 +1,24 @@
 from collections import deque
 n=int(input())
-graph=[]
-for _ in range(n):
-    graph.append(list(map(int,input())))
-dx=[-1,1,0,0]
-dy=[0,0,-1,1]
+arr = [list(input()) for _ in range(n)]
+visited=[[0]*n for _ in range(n)]
 answer=[]
-
-def fill(x1,y1):
-    queue=deque()
-    queue.append((x1,y1))
-    part_answer=1
-    graph[x1][y1]=0
-    while queue:
-        x,y=queue.popleft()
-        for i in range(4):
-            nx=x+dx[i]
-            ny=y+dy[i]
-            if nx>=n or nx<0 or ny>=n or ny<0:
-                continue
-            if graph[nx][ny]==0:
-                continue
-            if graph[nx][ny]==1:
-                queue.append((nx,ny))
-                part_answer+=1
-                graph[nx][ny]=0
-    return part_answer
-    
 for i in range(n):
     for j in range(n):
-        if graph[i][j]==1:
-            part=fill(i,j)
-            answer.append(part)
+        if arr[i][j]=='1' and visited[i][j]==0:
+            q=deque()
+            q.append((i,j))
+            visited[i][j]=1
+            count=0
+            while q:
+                pi,pj=q.popleft()
+                count+=1
+                for di,dj in ((-1,0),(1,0),(0,-1),(0,1)):
+                    ni,nj=pi+di, pj+dj
+                    if 0<=ni<n and 0<=nj<n and arr[ni][nj]=='1' and visited[ni][nj]==0:
+                        q.append((ni,nj))
+                        visited[ni][nj]=1
+            answer.append(count)
 print(len(answer))
 answer.sort()
 for i in answer:
