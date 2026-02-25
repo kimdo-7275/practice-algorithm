@@ -64,13 +64,7 @@ def count(c_num):
         count_num+=1
         c_num=horses_board[c_num][3]
     return count_num
-# white(1,1,0,1,1,1,0,0)
-# white(2,2,1,1,1,3,0,0)
-# red(3,1,1,1,2,1,0,1)
-#
-#
-# print(horses_board)
-# print(up_board)
+
 def answer():
     for turn in range(1,1002):
         if turn==1001:
@@ -98,10 +92,4 @@ def answer():
                 if count(c_num) >= 4:
                     print(turn)
                     return
-        # print(f"turn : {turn}")
-        # print(f"horses_board : {horses_board}")
-        # print(f"up_board : ")
-        # for ar in up_board:
-        #     print(*ar)
-        # print('==================================')
 answer()
