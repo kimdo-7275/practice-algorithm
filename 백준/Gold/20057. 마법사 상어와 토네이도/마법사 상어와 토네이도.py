@@ -1,63 +1,64 @@
 N=int(input())
-graph=[list(map(int, input().split())) for _ in range(N)]
-def in_range(x,y):
-    return 0<=x<N and 0<=y<N
-def rotate_90(proportion):
-    return list(map(list,zip(*proportion)))[::-1]
+remain=0
+arr=[list(map(int,input().split())) for _ in range(N)]
+si,sj=N//2,N//2
+dx=[0,1,0,-1]
+dy=[-1,0,1,0]
 
 p=[[0,0,0.02,0,0],
-   [0,0.1,0.07,0.01,0],
-   [0.05,0,0,0,0],
-   [0,0.1,0.07,0.01,0],
-   [0,0,0.02,0,0]]
+     [0,0.1,0.07,0.01,0],
+     [0.05,0,0,0,0],
+     [0,0.1,0.07,0.01,0],
+     [0,0,0.02,0,0]]
+
+def rotate_90(lst):
+    return [list(y) for y in zip(*[x[::-1] for x in lst])]
 p1=rotate_90(p)
 p2=rotate_90(p1)
 p3=rotate_90(p2)
-proportions=[p,p1,p2,p3]
+ps=[p,p1,p2,p3]
 
-directions=[[0,-1],[1,0],[0,1],[-1,0]] # 토네이도의 방향 : 좌->하->우->상
-tr=tc=N//2 # 처음 토네이도 위치
-
-out_sand=0 # 버리는 모래
-cur_direction=0 #현재방향
-turn=2 # 회전변수(2씩 늘어난다) 1+1,2+2,3+3
-now_lenght=0 # 한칸씩 이동한 수
-proportion=proportions[0] # 초기방향(왼쪽)
-alpha=[(2,1),(3,2),(2,3),(1,2)]
-
-while not (tr==0 and tc==0):
-
-    # 토네이도 이동
-    tr+=directions[cur_direction][0]
-    tc+=directions[cur_direction][1]
-    now_lenght+=1 # 토네이도 길이 갱신
-    sand = graph[tr][tc]
-    graph[tr][tc]=0
-    left=sand
-
-    # 비율에 맞게 모래정보 갱신
-    for r in range(5):
-        for c in range(5):
-            now_sand=int(proportion[r][c]*sand)
-            left-=now_sand
-            if in_range(tr+r-2, tc+c-2):
-                graph[tr+r-2][tc+c-2]+=now_sand
+answer=0
+d=0
+cg_l=0
+cnt=0
+goal=1
+while not (si==0 and sj==0):
+    if cnt<goal:
+        ni,nj=si+dx[d],sj+dy[d]
+        cnt+=1
+    elif cnt==goal:
+        d=(d+1)%4
+        if cg_l==0:
+            cg_l+=1
+            cnt=1
+            ni, nj = si + dx[d], sj + dy[d]
+        elif cg_l==1:
+            cg_l-=1
+            cnt=1
+            goal+=1
+            ni, nj = si + dx[d], sj + dy[d]
+    # 여기에 할 거 하고
+    total=arr[ni][nj]
+    move_sand=0
+    for i in range(5):
+        for j in range(5):
+            if ps[d][i][j]==0:
+                continue
+            pi,pj=ni-2+i,nj-2+j
+            if not (0<=pi<N and 0<=pj<N):
+                answer+=int(total*ps[d][i][j])
+                move_sand+=int(total*ps[d][i][j])
             else:
-                out_sand+=now_sand
-
-    # 남은거 알파에 두기
-    if in_range(tr+alpha[cur_direction][0]-2,tc+alpha[cur_direction][1]-2):
-        graph[tr+alpha[cur_direction][0]-2][tc+alpha[cur_direction][1]-2]+=left
+                move_sand+=int(total*ps[d][i][j])
+                arr[pi][pj]+=int(total*ps[d][i][j])
+    remain=total-move_sand
+    if 0<=ni+dx[d]<N and 0<=nj+dy[d]<N:
+        arr[ni+dx[d]][nj+dy[d]]+=remain
     else:
-        out_sand+=left
+        answer+=remain
+    si,sj=ni,nj
+print(answer)
 
-    # 방향 돌리기
-    if now_lenght==turn or now_lenght==turn//2:
-        cur_direction=(cur_direction+1) % 4 # 방향바꿔주고
-        proportion=proportions[cur_direction] # 비율 그래프도 바꿔주고
-        if now_lenght==turn:
-            now_lenght=0
-            turn+=2
-print(out_sand)
 
 
