@@ -1,19 +1,22 @@
-n = int(input())
-stack = [0]
-answer = 0
-buildings = []
-for i in range(n):
-    buildings.append(int(input().split()[1]))
-buildings.append(0)
-
-for a in buildings:
-    while stack[-1] > a:
-        answer+=1
-
-        b = stack.pop()
-        while b == stack[-1]:
-            stack.pop()
-
-    stack.append(a)
-
+N=int(input())
+buildings=[]
+for _ in range(N):
+    _,b = map(int,input().split())
+    buildings.append(b)
+answer=0
+stack=[0]
+for i in buildings:
+    if stack[-1]<i:
+        stack.append(i)
+    else:
+        while True:
+            if stack[-1]>i:
+                stack.pop()
+                answer+=1
+            elif stack[-1]<i:
+                stack.append(i)
+                break
+            else:
+                break
+answer+=(len(stack)-1)
 print(answer)
