@@ -1,19 +1,20 @@
-n=int(input())
-lst = list(map(int,input().split()))
-m=int(input())
+N=int(input())
+numbers=list(map(int,input().split()))
+total=int(input())
+s=0
+e=max(numbers)
+answer=0
 
-s = 0
-e = max(lst)
-answer = 0
 while s<=e:
-    total = 0
-    h = (s+e) // 2
-    for i in lst:
-        total+=min(i,h)
-
-    if total > m:
+    h=(s+e)//2
+    tmp_total=0
+    for number in numbers:
+        tmp_total+=min(number,h)
+    if tmp_total>total:
         e=h-1
+        continue
     else:
         answer=h
         s=h+1
+        continue
 print(answer)
