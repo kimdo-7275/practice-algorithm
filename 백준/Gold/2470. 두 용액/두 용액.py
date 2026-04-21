@@ -1,23 +1,23 @@
-n = int(input())
-lst = list(map(int,input().split()))
+N=int(input())
+lst=list(map(int,input().split()))
 lst.sort()
-start = 0
-end = len(lst)-1
-total = lst[start] + lst[end]
-answer = [start,end]
+s,e=0,N-1
+total=2*(10**9)
+answer=[]
+while s<e:
+    tmp_total=lst[s]+lst[e]
+    if tmp_total>0:
+        if abs(tmp_total) < abs(total):
+            answer=[lst[s],lst[e]]
+            total=tmp_total
+        e-=1
 
-while start != end:
-    tmp = lst[start] + lst[end]
-    if abs(tmp) < abs(total):
-        total = tmp
-        answer = [start,end]
-    if tmp > 0:
-        end -= 1
-        continue
-    elif tmp < 0:
-        start += 1
-        continue
-    elif tmp == 0:
-        answer = [start, end]
+    elif tmp_total<0:
+        if abs(tmp_total) < abs(total):
+            answer=[lst[s],lst[e]]
+            total = tmp_total
+        s+=1
+    else:
+        answer=[lst[s],lst[e]]
         break
-print(lst[answer[0]], lst[answer[1]])
+print(*answer)
