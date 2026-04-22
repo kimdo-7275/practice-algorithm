@@ -1,13 +1,13 @@
-n=int(input())
-dis=list(map(int,input().split()))
-pri=list(map(int,input().split()))
+N=int(input())
+distance=list(map(int,input().split()))
+gas_price=list(map(int,input().split()))
+answer=distance[0]*gas_price[0]
+now_price=gas_price[0]
 
-total_price=dis[0]*pri[0]
-now_pri=pri[0]
-for i in range(1,n-1):
-    if now_pri < pri[i]:
-        total_price+=now_pri*dis[i]
+for idx in range(1,N-1):
+    if gas_price[idx] < now_price:
+        now_price=gas_price[idx]
+        answer+=now_price*distance[idx]
     else:
-        now_pri=pri[i]
-        total_price+=now_pri*dis[i]
-print(total_price)
+        answer+=now_price*distance[idx]
+print(answer)
