@@ -1,13 +1,20 @@
-n,d=map(int,input().split())
-short=[list(map(int,input().split())) for _ in range(n)]
-short.sort(key=lambda x:x[1])
-arr=[10001]*(d+1)
+N,D=map(int,input().split())
+roads=[]
+for _ in range(N):
+    s,e,l=map(int,input().split())
+    if e>D:
+        continue
+    roads.append([s,e,l])
+roads.sort()
+arr=[float('inf')]*(D+1)
 arr[0]=0
-for i in range(1,d+1):
-    for s in short:
-        if s[1]>i:
+for i in range(D+1):
+    if i!=0:
+        arr[i]=min(arr[i],arr[i-1]+1)
+    for idx in range(len(roads)):
+        s,e,l=roads[idx]
+        if s>i:
             break
-        if s[1]==i:
-            arr[i]=min(min(arr[i-1]+1,arr[s[0]]+s[2]),arr[i])
-    arr[i]=min(arr[i-1]+1,arr[i])
+        if s==i:
+            arr[e]=min(arr[e],arr[s]+l)
 print(arr[-1])
