@@ -1,0 +1,10 @@
+SELECT FLAVOR
+FROM (
+    -- 상반기 데이터와 7월 데이터를 일단 한 통에 다 집어넣습니다.
+    SELECT FLAVOR, TOTAL_ORDER FROM FIRST_HALF
+    UNION ALL
+    SELECT FLAVOR, TOTAL_ORDER FROM JULY
+) AS COMBINED
+GROUP BY FLAVOR -- 맛별로 그룹화
+ORDER BY SUM(TOTAL_ORDER) DESC -- 상반기+7월 총합이 큰 순서대로 정렬
+LIMIT 3; -- 상위 3개만 추출
